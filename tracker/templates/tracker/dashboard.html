@@ -1,0 +1,48 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white p-3">
+            <h4>Total Applications</h4>
+            <h2>{{ total_applications }}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card p-3 mb-4">
+            <h4>Applications by Status</h4>
+            <ul class="list-group">
+                {% for status in status_counts %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ status.status }}
+                        <span class="badge bg-secondary rounded-pill">{{ status.total }}</span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No applications found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-3 mb-4">
+            <h4>Recent Applications</h4>
+            <ul class="list-group">
+                {% for job in recent_applications %}
+                    <li class="list-group-item">
+                        <strong>{{ job.job_title }}</strong> at {{ job.company_name }}
+                        <span class="badge bg-info float-end">{{ job.status }}</span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No recent applications.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

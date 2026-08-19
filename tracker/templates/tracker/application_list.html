@@ -1,57 +1,110 @@
 {% extends 'tracker/base.html' %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Job Applications</h2>
-    <a href="{% url 'create_application' %}" class="btn btn-success">+ Add Application</a>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Job Applications</h2>
+        <a href="{% url 'create_application' %}" class="btn btn-primary">+ Add New Application</a>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="GET" action="{% url 'application_list' %}" class="row g-3">
+                <!-- Search Query -->
+                <div class="col-md-3">
+                    <input type="text" name="q" class="form-control" placeholder="Search title, company..." value="{{ query }}">
+                </div>
+                <!-- Location Filter -->
+                <div class="col-md-2">
+                    <input type="text" name="location" class="form-control" placeholder="Location..." value="{{ location_filter }}">
+                </div>
+                <!-- Status Filter -->
+                <div class="col-md-2">
+                    <select name="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="Wishlist" {% if status_filter == 'Wishlist' %}selected{% endif %}>Wishlist</option>
+                        <option value="Applied" {% if status_filter == 'Applied' %}selected{% endif %}>Applied</option>
+                        <option value="Interview" {% if status_filter == 'Interview' %}selected{% endif %}>Interview</option>
+                        <option value="Offer" {% if status_filter == 'Offer' %}selected{% endif %}>Offer</option>
+                        <option value="Rejected" {% if status_filter == 'Rejected' %}selected{% endif %}>Rejected</option>
+                    </select>
+                </div>
+                <!-- Category Filter -->
+                <div class="col-md-2">
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if category_filter == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Action Buttons -->
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-secondary w-50">Filter</button>
+                    <a href="{% url 'application_list' %}" class="btn btn-outline-secondary w-50">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Company & Position</th>
+                            <th>Location</th>
+                            <th>Categories</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in applications %}
+                            <tr>
+                                <td>
+                                    <strong>{{ job.company_name }}</strong><br>
+                                    <small class="text-muted">{{ job.job_title }}</small>
+                                </td>
+                                <td>{{ job.location|default:"N/A" }}</td>
+                                <td>
+                                    {% for category in job.categories.all %}
+                                        <span class="badge bg-info text-dark me-1">{{ category.name }}</span>
+                                    {% empty %}
+                                        <span class="text-muted small">-</span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <span class="badge 
+                                        {% if job.status == 'Applied' %}bg-primary
+                                        {% elif job.status == 'Interview' %}bg-warning text-dark
+                                        {% elif job.status == 'Offer' %}bg-success
+                                        {% elif job.status == 'Rejected' %}bg-danger
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ job.status }}
+                                    </span>
+                                </td>
+                                <td>{{ job.application_date }}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'update_application' job.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="{% url 'add_interview' job.pk %}" class="btn btn-sm btn-outline-warning">Interview</a>
+                                    <a href="{% url 'ai_analysis' job.pk %}" class="btn btn-sm btn-outline-info">AI</a>
+                                    <a href="{% url 'delete_application' job.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">No job applications found matching your criteria.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-
-<form method="GET" class="row g-2 mb-4">
-    <div class="col-md-5">
-        <input type="text" name="q" class="form-control" placeholder="Search by title or company..." value="{{ request.GET.q }}">
-    </div>
-    <div class="col-md-4">
-        <select name="status" class="form-select">
-            <option value="">All Statuses</option>
-            <option value="Wishlist">Wishlist</option>
-            <option value="Applied">Applied</option>
-            <option value="Screening">Screening</option>
-            <option value="Interview">Interview</option>
-            <option value="Selected">Selected</option>
-            <option value="Rejected">Rejected</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <button type="submit" class="btn btn-primary w-100">Filter</button>
-    </div>
-</form>
-
-<table class="table table-striped table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Title</th>
-            <th>Company</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for app in applications %}
-        <tr>
-            <td>{{ app.job_title }}</td>
-            <td>{{ app.company_name }}</td>
-            <td><span class="badge bg-primary">{{ app.status }}</span></td>
-            <td>{{ app.application_date }}</td>
-            <td>
-                <a href="{% url 'ai_analysis' app.id %}" class="btn btn-sm btn-info text-white">AI Analysis</a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5" class="text-center">No applications found.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 {% endblock %}

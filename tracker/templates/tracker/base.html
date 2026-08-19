@@ -10,10 +10,32 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand" href="{% url 'dashboard' %}">Job Tracker</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-                <a class="nav-link" href="{% url 'application_list' %}">Applications</a>
-                <a class="nav-link" href="{% url 'create_application' %}">Add New Job</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- বাম পাশের নেভিগেশন লিংক -->
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    <a class="nav-link" href="{% url 'application_list' %}">Applications</a>
+                    <a class="nav-link" href="{% url 'create_application' %}">Add New Job</a>
+                </div>
+
+                <!-- ডান পাশের লগইন / রেজিস্টার / লগআউট লিংক -->
+                <div class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                        <span class="nav-link text-light me-2">Hello, <strong>{{ user.username }}</strong></span>
+                        <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm mt-1">Logout</button>
+                        </form>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link btn btn-primary text-white ms-2 px-3" href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
@@ -23,6 +45,7 @@
         {% endblock %}
     </div>
 
-    <script href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS Script (src সঠিক করা হয়েছে) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

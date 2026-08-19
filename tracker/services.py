@@ -1,28 +1,31 @@
-import google.generativeai as genai
-import json
 import os
+import google.generativeai as genai
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 def analyze_job_description(job_description):
+    if not job_description or not job_description.strip():
+        return "Please provide a valid job description for analysis."
+
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        return "Error: GEMINI_API_KEY environment variable is not set."
+
     try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-1.5-flash")
+
         prompt = f"""
-        Analyze the following job description and return ONLY a valid JSON object with these keys:
-        "summary", "required_skills", "required_experience", "important_technologies", "interview_suggestions".
-        
+        Analyze the following job description and provide:
+        1. Key Requirements & Qualifications
+        2. Top 5 Essential Technical & Soft Skills
+        3. Match Advice / Resume Tailoring Tips
+
         Job Description:
         {job_description}
         """
-        
-        response = model.generate_content(
-            prompt,
-            generation_config={"response_mime_type": "application/json"}
-        )
-        return json.loads(response.text)
+
+        response = model.generate_content(prompt)
+        return response.text
+
     except Exception as e:
-        return {
-            "error": "Failed to analyze job description using AI.",
-            "details": str(e)
-        }
+        return f"AI Analysis Failed: {str(e)}"

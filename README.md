@@ -1,18 +1,21 @@
 # AI Job Application Tracker 🚀 & Complete Documentation
 
-An AI-powered Django web application designed to help job seekers track their job applications and automatically analyze job descriptions using Google's Gemini AI.
+An AI-powered Django web application designed to help job seekers track their job applications and automatically analyze job descriptions using AI.
 
 ---
 
 ## 🌟 Key Features
 
+* **User Authentication:** Allow users to securely register, log in, and log out.
 * **Job Application Management:** Add, edit, view, and track job applications and status.
-* **AI Job Analysis:** Get automated summaries, key required skills, tools, and custom interview preparation advice from job descriptions using Gemini AI.
-* **Secure Setup:** Keeps private API credentials safe using environment variable files (`.env`).
+* **AI Job Analysis:** Get automated summaries, key required skills, tools, and custom interview preparation advice from job descriptions using AI.
+* **Search and Filtering:** Effortlessly search and filter job applications by title, company, or status.
+* **Interview Management:** Schedule, organize, and keep track of upcoming interview dates, notes, and preparation steps for each job application.
+* **Interactive Dashboard:** View real-time visual insights, summary metrics, total applications, and interview statuses at a glance.
 
 ---
 
-## 📽️ Project Demo & Video Walkthrough
+## 📽️ Project Demo Video 
 
 * **Drive Video Link:** [Click here to watch the demo video](https://drive.google.com/your-drive-video-link-here)
 
@@ -22,7 +25,7 @@ An AI-powered Django web application designed to help job seekers track their jo
 
 * **Python:** Version 3.10 or higher
 * **Git:** Installed on local machine
-* **Gemini API Key:** Free key obtained from [Google AI Studio](https://aistudio.google.com/app/apikey)
+* **API Key:** Free key obtained from [Google AI Studio](https://aistudio.google.com/app/apikey)
 
 ---
 

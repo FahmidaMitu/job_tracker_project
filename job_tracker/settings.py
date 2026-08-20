@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tracker',
+    'markdownify',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +133,4 @@ MAILERS = {
 
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', 'AQ.Ab8RN6ItEc_343HtI2PDhEqT2o68sr7T89oX2v1L0FDO5bktHA')

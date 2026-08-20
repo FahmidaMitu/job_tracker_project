@@ -133,7 +133,5 @@ def add_interview(request, pk):
 @login_required
 def ai_analysis(request, pk):
     job = get_object_or_404(JobApplication, pk=pk, user=request.user)
-    analysis_result = None
-    if request.method == 'POST':
-        analysis_result = analyze_job_description(job.job_description)
+    analysis_result = analyze_job_description(job.job_description)
     return render(request, 'tracker/ai_analysis.html', {'job': job, 'analysis': analysis_result})

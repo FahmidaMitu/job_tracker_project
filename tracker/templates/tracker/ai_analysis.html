@@ -1,47 +1,29 @@
 {% extends 'tracker/base.html' %}
+{% load markdownify %}
 
 {% block content %}
-<div class="card p-4">
-    <h2>AI Analysis: {{ application.job_title }}</h2>
-    <p class="text-muted">Company: {{ application.company_name }}</p>
-    <hr>
-
-    {% if analysis.error %}
-        <div class="alert alert-danger">{{ analysis.error }}</div>
-    {% else %}
-        <div class="mb-4">
-            <h4>Summary</h4>
-            <p>{{ analysis.summary }}</p>
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">AI Analysis: {{ job.job_title }}</h4>
+            <span class="badge bg-light text-dark">{{ job.company_name }}</span>
         </div>
+        <div class="card-body">
+            <h5 class="card-title text-muted mb-3">Company: {{ job.company_name }}</h5>
+            <hr>
 
-        <div class="mb-4">
-            <h4>Required Skills</h4>
-            <ul>
-                {% for skill in analysis.required_skills %}
-                    <li>{{ skill }}</li>
-                {% endfor %}
-            </ul>
+            <div class="analysis-content bg-light p-3 rounded">
+                {% if analysis %}
+                    <div>{{ analysis|markdownify }}</div>
+                {% else %}
+                    <p class="text-danger">No analysis result generated or job description is empty.</p>
+                {% endif %}
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'application_list' %}" class="btn btn-secondary">Back to List</a>
+            </div>
         </div>
-
-        <div class="mb-4">
-            <h4>Important Technologies</h4>
-            <ul>
-                {% for tech in analysis.important_technologies %}
-                    <li>{{ tech }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="mb-4">
-            <h4>Interview Preparation Suggestions</h4>
-            <ul>
-                {% for suggestion in analysis.interview_suggestions %}
-                    <li>{{ suggestion }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-
-    <a href="{% url 'application_list' %}" class="btn btn-secondary mt-3">Back to List</a>
+    </div>
 </div>
 {% endblock %}

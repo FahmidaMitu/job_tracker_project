@@ -17,7 +17,14 @@ An AI-powered Django web application designed to help job seekers track their jo
 
 ## 📽️ Project Demo Video 
 
-* **Drive Video Link:** [Click here to watch the demo video](https://drive.google.com/your-drive-video-link-here)
+* **Drive Video Link:** [Click here to watch the demo video](https://drive.google.com/file/d/1K2ibXDCpgrvka7QL_coinWogUfD6p6Hv/view?usp=sharing)
+
+---
+
+## 📸 Screenshots & Visual Overview
+
+* **Drive Screenshots Link:** [Click here to see the screenshots](https://drive.google.com/drive/folders/1590X-zBjZsdetxpjfJehIntIRgcRyyI4?usp=sharing)
+
 
 ---
 
